@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Oye_Themetuner>
+            <active>true</active>
+            <codePool>local</codePool>
+        </Oye_Themetuner>
+    </modules>
+</config>

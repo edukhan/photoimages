@@ -1,0 +1,50 @@
+<?php 
+// Get collection of slides
+$collection = $this->getBanners(); 
+$slider		= Mage::getModel('slider/slider')->load($this->getId());
+// Get system configuration
+$config = array(
+	'id'				=> $slider->getId(),
+	'enabled'			=> $slider->getStatus(),
+	'effect'			=> $slider->getConfEffect(),
+	'speed'				=> $slider->getConfSpeed(),
+	'navigation'		=> $slider->getConfNavigation(),
+	'pauseOnHover'		=> $slider->getConfPause()
+);
+?>
+<?php if (count($collection) > 0 && $config['enabled'] == true): ?>
+<div class="activated-banner activated-banner-<?php echo $slider->getId() ?>">
+	<ul class="activated-slides">
+		<?php foreach($collection as $item): ?>
+			<li>
+				<?php if($imageUrl = $this->getImageUrl($item, 100)): ?>
+					<?php if($link = $item->getLink()): ?>
+					<a href="<?php echo $link ?>">
+					<?php endif; ?>
+						<img src="<?php echo $imageUrl; ?>" alt="<?php echo $this->escapeHtml($item->getTitle()); ?>" />
+					<?php if($caption = $item->getCaption()): ?>
+						<div class="activated-caption">
+							<div class="activated-caption-content">
+							<?php echo $caption ?>
+							</div>
+						</div>
+					<?php endif; ?>
+					<?php if($link): ?>
+					</a>
+					<?php endif; ?>
+				<?php endif; ?>
+			</li>
+		<?php endforeach; ?>
+	</ul>
+</div>
+<script type="text/javascript">
+	// Initialize banner script
+	Banner.init({
+		id:	"<?php echo $config['id'] ?>",
+		effect: "<?php echo $config['effect'] ?>",
+		speed: <?php echo ($config['speed'] ? $config['speed'] : 5000) ?>,
+		navigation: <?php echo ($config['navigation'] ? "true" : "false") ?>,
+		pauseOnHover: <?php echo ($config['pauseOnHover'] ? "true" : "false") ?>
+	});
+</script>
+<?php endif; ?>

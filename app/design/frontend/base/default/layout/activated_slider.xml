@@ -1,0 +1,28 @@
+<?xml version="1.0" ?>
+<layout version="1.0.0">
+	<default>
+		<reference name="head">
+			<action method="addCss">
+				<stylesheet>css/activated/slider/flexslider.css</stylesheet>
+			</action>
+			<action method="addJs" ifconfig="slider/view/jquery">
+				<script>activated/slider/jquery.js</script>
+			</action>
+			<action method="addJs">
+				<script>activated/slider/jquery.flexslider-min.js</script>
+			</action>
+			<action method="addJs">
+				<script>activated/slider/banner.js</script>
+			</action>
+		</reference>
+	</default>
+	<cms_index_index>
+		<reference name="content">
+			<block type="slider/slider" name="banner" before="-" template="activated/slider/banner.phtml">
+				<action method="setId">
+					<id helper="slider/getHomeId" />
+				</action>
+			</block>
+		</reference>
+	</cms_index_index>
+</layout>

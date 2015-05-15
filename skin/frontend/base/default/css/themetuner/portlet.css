@@ -1,0 +1,18 @@
+.themetuner-portlet-header {display: none;}
+.themetuner-portlet-header .name {}
+.themetuner-layout .themetuner-column { border: 1px dashed #00CBFF; padding: 5px;}
+.themetuner-layout .themetuner-column:before, .themetuner-layout .themetuner-column:after { content: " "; display: table; }
+.themetuner-layout .themetuner-column:after { clear: both; }
+.themetuner-column-add {display: none;}
+.themetuner-layout .themetuner-column-add { display: block; text-align: right;}
+.themetuner-layout .themetuner-column-add button {border-width: 1px; border: none; padding: 0 7px 1px 7px; background: #00CBFF repeat-x 0 100%; color: #fff; font: bold 12px arial, helvetica, sans-serif; cursor: pointer; text-align: center !important; white-space: nowrap; padding-left: 6px;}
+.themetuner-layout .themetuner-portlet { margin: 0 1em 1em 0; border: 1px solid #F77E00; min-height: 18px; margin: 5px; clear: both;}
+.themetuner-layout .themetuner-portlet-header { display: block !important; clear: both !important; color: white !important; font-size: 8pt !important; line-height: 18px !important; height: 18px !important; font-weight: bold !important; overflow: hidden !important; text-align: left !important; margin-bottom: -18px !important;}
+.themetuner-layout .themetuner-portlet-header .themetuner-remove {float: right; height: 17px; line-height: 17px; max-width: 20px; overflow: hidden; padding: 0; right: 0; text-align: right;}
+.themetuner-layout .themetuner-portlet-header .themetuner-remove span {position: absolute; margin-left: -17px; z-index: 10001;}
+.themetuner-layout .themetuner-portlet-header .ui-icon { float: right; }
+.themetuner-layout .themetuner-portlet-header .name { background: #F77E00 url("../../images/themetuner/layout_block.gif") no-repeat; padding: 0 5px 0 20px; border-bottom: none; z-index: 10000; position: absolute;}
+.ui-sortable-placeholder { border: 1px dotted black; visibility: visible !important; height: 50px !important; }
+.ui-sortable-placeholder * { visibility: hidden; }
+.themetuner-layout .themetuner-portlet-content:before, .themetuner-layout .themetuner-portlet-content:after { content: " "; display: table; }
+.themetuner-layout .themetuner-portlet-content:after { clear: both; }

@@ -1,0 +1,8 @@
+.htaccess
+var
+app/etc/local.xml
+downloader/.cache/
+downloader/cache.cfg
+media
+shell/import/import.csv
+shell/import/magmi.csv

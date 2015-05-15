@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<layout version="0.1.0">
+    <default>
+        <reference name="footer">
+            <remove name="footer_links"/>
+            <remove name="footer_links2"/>
+			<remove name="footer_links_company"/>
+            <block type="cms/block" name="footer_productlinks">
+                <action method="setBlockId"><block_id>footer_productlinks</block_id></action>
+            </block>
+            <block type="cms/block" name="footer-services">
+                <action method="setBlockId"><block_id>footer-services</block_id></action>
+            </block>
+			<block type="cms/block" name="footer_links_customercare">
+                <action method="setBlockId"><block_id>footer_links_customercare</block_id></action>
+            </block>
+			<block type="cms/block" name="footer_links_about">
+                <action method="setBlockId"><block_id>footer_links_about</block_id></action>
+            </block>
+        </reference>
+    </default>
+</layout>

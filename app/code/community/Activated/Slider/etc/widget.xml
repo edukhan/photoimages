@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<widgets>
+	<slider type="slider/slider" translate="name description">
+		<name>Activated Slider</name>
+		<description>Responsive slider by Activated Apps</description>
+		<parameters>
+			<slider_id translate="label">
+				<visible>1</visible>
+				<label>Choose a slider</label>
+				<type>select</type>
+				<source_model>slider/slider</source_model>
+			</slider_id>
+			<template>
+				<required>1</required>
+				<visible>0</visible>
+				<value>activated/slider/banner.phtml</value>
+				<type>text</type>
+			</template>
+		</parameters>
+	</slider>
+</widgets>

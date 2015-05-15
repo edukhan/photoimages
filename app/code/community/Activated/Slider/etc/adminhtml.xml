@@ -1,0 +1,82 @@
+<?xml version="1.0" ?>
+<!--
+/**
+* Activated banner admin config
+*
+* @author Activated
+*/
+-->
+<config>
+	<menu>
+		<cms>
+			<children>
+				<slider translate="title" module="slider">
+					<title>Slider</title>
+					<sort_order>65</sort_order>
+					<children>
+						<manage translate="title" module="slider">
+							<title>Manage Sliders</title>
+							<action>slider/adminhtml_slider</action>
+							<sort_order>50</sort_order>
+						</manage>
+						<banner translate="title" module="slider">
+							<title>Manage Banners</title>
+							<action>slider/adminhtml_banner</action>
+							<sort_order>60</sort_order>
+						</banner>
+					</children> 
+				</slider>
+			</children>
+		</cms>
+	</menu>
+	<acl>
+		<resources>
+			<all>
+				<title>Allow Everything</title>
+			</all>
+			<admin>
+				<children>
+					<slider translate="title" module="slider">
+						<title>Slider</title>
+						<sort_order>65</sort_order>
+						<children>
+							<save translate="title">
+								<title>Save Slider</title>
+								<sort_order>0</sort_order>
+							</save>
+							<delete translate="title">
+								<title>Delete Slider</title>
+								<sort_order>10</sort_order>
+							</delete>
+						</children>
+					</slider>
+					<banner translate="title" module="slider">
+						<title>Banner</title>
+						<sort_order>65</sort_order>
+						<children>
+							<save translate="title">
+								<title>Save Banner</title>
+								<sort_order>0</sort_order>
+							</save>
+							<delete translate="title">
+								<title>Delete Banner</title>
+								<sort_order>10</sort_order>
+							</delete>
+						</children>
+					</banner>
+					<system>
+						<children>
+							<config>
+								<children>
+									<slider translate="title" module="slider">
+										<title>Slider Management</title>
+									</slider>
+								</children>
+							</config>
+						</children>
+					</system>
+				</children>
+			</admin>
+		</resources>
+	</acl>
+</config>

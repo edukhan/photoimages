@@ -1,0 +1,77 @@
+<?xml version="1.0" ?>
+<layout>
+	<slider_adminhtml_slider_index>
+		<reference name="content">
+			<block type="slider/adminhtml_slider" name="slider" />
+		</reference>
+	</slider_adminhtml_slider_index>
+	
+	<slider_adminhtml_slider_grid>
+		<block type="slider/adminhtml_slider_edit_tab_banner" name="root" />
+	</slider_adminhtml_slider_grid>
+	
+	<slider_adminhtml_slider_new>
+		<update handle="slider_adminhtml_slider_edit" />
+	</slider_adminhtml_slider_new>
+	
+	<slider_adminhtml_slider_edit>
+		<update handle="editor" />
+		<reference name="content">
+			<block type="slider/adminhtml_slider_edit" name="slider_edit" />
+		</reference>
+		<reference name="left">
+			<block type="slider/adminhtml_slider_edit_tabs" name="slider_edit_tabs">
+				<block type="slider/adminhtml_slider_edit_tab_main" name="slider_edit_tab_main" />
+				<block type="slider/adminhtml_slider_edit_tab_banner" name="slider_edit_tab_banner" />
+				<action method="addTab">
+					<name>main_section</name>
+					<block>slider_edit_tab_main</block>
+				</action>
+				<action method="addTab">
+					<name>bannerGrid</name>
+					<block>slider_edit_tab_banner</block>
+				</action>
+			</block>
+		</reference>
+	</slider_adminhtml_slider_edit>
+	
+	<slider_adminhtml_banner_index>
+		<reference name="content">
+			<block type="slider/adminhtml_banner" name="banner" />
+		</reference>
+	</slider_adminhtml_banner_index>
+	
+	<slider_adminhtml_banner_grid>
+		<block type="slider/adminhtml_banner_grid" name="root" />
+	</slider_adminhtml_banner_grid>
+	
+	<slider_adminhtml_banner_new>
+		<update handle="slider_adminhtml_banner_edit" />
+	</slider_adminhtml_banner_new>
+	
+	<slider_adminhtml_banner_edit>
+		<update handle="editor" />
+		<reference name="content">
+			<block type="slider/adminhtml_banner_edit" name="banner_edit" />
+		</reference>
+		<reference name="left">
+			<block type="slider/adminhtml_banner_edit_tabs" name="banner_edit_tabs">
+				<block type="slider/adminhtml_banner_edit_tab_main" name="banner_edit_tab_main" />
+				<block type="slider/adminhtml_banner_edit_tab_content" name="banner_edit_tab_content" />
+				<block type="slider/adminhtml_banner_edit_tab_image" name="banner_edit_tab_image" />
+				<action method="addTab">
+					<name>main_section</name>
+					<block>banner_edit_tab_main</block>
+				</action>
+				<action method="addTab">
+					<name>content_section</name>
+					<block>banner_edit_tab_content</block>
+				</action>
+				<action method="addTab">
+					<name>image_section</name>
+					<block>banner_edit_tab_image</block>
+				</action>
+			</block>
+		</reference>
+	</slider_adminhtml_banner_edit>
+</layout>

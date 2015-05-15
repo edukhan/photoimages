@@ -1,0 +1,15 @@
+<?php
+$category = Mage::getSingleton('catalog/layer')->getCurrentCategory();
+$categories = $category->getCollection()
+        ->addAttributeToSelect(array('name', 'thumbnail'))
+        ->addAttributeToFilter('is_active', 1)
+        ->addIdFilter($category->getChildren())
+?>
+<ul class="subcategories">
+    <?php foreach ($categories as $category): ?>
+        <li>
+            <a href="<?php echo $category->getUrl() ?>"><img src="<?php echo Mage::getBaseUrl('media') . 'catalog' . DS . 'category' . DS . $category->getThumbnail() ?>" alt="<?php echo $this->htmlEscape($category->getName()) ?>" />
+                <span><?php echo $category->getName() ?></span></a>
+        </li>
+    <?php endforeach; ?>
+</ul>

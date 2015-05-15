@@ -1,0 +1,96 @@
+<?php $helper = Mage::helper('themetuner');
+$preset = $this->getPreset(); ?>
+
+<script type="text/javascript">
+//<![CDATA[
+var saveSettingsUrl = "<?php echo $this->getUrl("themetuner/adminhtml_themetuner/saveSettings") ?>";
+var refreshGridUrl = "<?php echo $this->getUrl("themetuner/adminhtml_themetuner/index") ?>";
+var presetId = <?php echo $preset->getId() ?>;
+//]]>
+</script>
+
+<div id="popup-settings" class="themetuner-popup themetuner-popup-save">
+	<div class="title"><?php echo $helper->__('Settings') ?></div>
+    <div class="magento_close" id="popup-settings-close"> </div>
+    
+    <div class="content">
+    	<div class="content-header">
+        	<h3><?php echo $helper->__('Tune "%s"', $preset->getName()) ?></h3>
+        </div>
+        
+        <div class="popup-errors" id="popup-settings-errors" style="display: none;"></div>
+        
+        <form action="" method="" id="popup-settings-form">
+            <div class="entry-edit">
+            	<div class="entry-edit-head collapseable">
+                	<a href="#"><?php echo $helper->__('Content') ?></a>
+                </div>
+                <fieldset class="config collapseable">
+                	<table cellspacing="0" class="form-list">
+                        <tbody>
+                            <tr>
+                                <td class="label"><label for="popup-settings-package"><?php echo $helper->__('Store') ?></label></td>
+                                <td class="value">
+                                	<select name="store_id" id="popup-settings-store-id">
+										<?php foreach ($this->getStores() as $store) { ?>
+                                            <option value="<?php echo $store->getId() ?>" <?php echo $store->getId() == $preset->getData('store_id') ? 'selected="selected"' : '' ?>><?php echo $store->getName() ?></option>
+                                        <?php } ?>
+                                    </select>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </fieldset>
+                
+                <div class="entry-edit-head collapseable">
+                	<a href="#"><?php echo $helper->__('Package') ?></a>
+                </div>
+                <fieldset class="config collapseable">
+                	<table cellspacing="0" class="form-list">
+                        <tbody>
+                            <tr>
+                                <td class="label"><label for="popup-settings-package"><?php echo $helper->__('Package Name') ?></label></td>
+                                <td class="value"><input type="text" class="input-text" name="package" id="popup-settings-package" value="<?php echo $preset->getData('theme_package_dir') ?>" /></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </fieldset>
+                
+                <div class="entry-edit-head collapseable">
+                	<a href="#"><?php echo $helper->__('Theme') ?></a>
+                </div>
+                <fieldset class="config collapseable">
+                	<table cellspacing="0" class="form-list">
+                        <tbody>
+                            <tr>
+                                <td class="label"><label for="popup-settings-locale"><?php echo $helper->__('Translations') ?></label></td>
+                                <td class="value"><input type="text" class="input-text" name="locale" id="popup-settings-locale" value="<?php echo $preset->getData('theme_locale_dir') ?>" /></td>
+                            </tr>
+                            <tr>
+                                <td class="label"><label for="popup-settings-template"><?php echo $helper->__('Templates') ?></label></td>
+                                <td class="value"><input type="text" class="input-text" name="template" id="popup-settings-template" value="<?php echo $preset->getData('theme_template_dir') ?>" /></td>
+                            </tr>
+                            <tr>
+                                <td class="label"><label for="popup-settings-skin"><?php echo $helper->__('Skin') ?></label></td>
+                                <td class="value"><input type="text" class="input-text" name="skin" id="popup-settings-skin" value="<?php echo $preset->getData('theme_skin_dir') ?>" /></td>
+                            </tr>
+                            <tr>
+                                <td class="label"><label for="popup-settings-layout"><?php echo $helper->__('Layout') ?></label></td>
+                                <td class="value"><input type="text" class="input-text" name="layout" id="popup-settings-layout" value="<?php echo $preset->getData('theme_layout_dir') ?>" /></td>
+                            </tr>
+                            <tr>
+                                <td class="label"><label for="popup-settings-default"><?php echo $helper->__('Default') ?></label></td>
+                                <td class="value"><input type="text" class="input-text" name="default" id="popup-settings-default" value="<?php echo $preset->getData('theme_default_dir') ?>" /></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </fieldset>
+            </div>
+        </form>
+        
+        <ul class="actions">
+            <li><button title="<?php echo $helper->__('Save') ?>" type="button" class="scalable save" id="popup-settings-yes"><span><?php echo $helper->__('Save') ?></span></button></li>
+            <li><button title="<?php echo $helper->__('Cancel') ?>" type="button" class="scalable back" id="popup-settings-cancel"><span style="padding:0;background:none;"><?php echo $helper->__('Cancel') ?></span></button></li>
+        </ul>
+    </div>
+</div>

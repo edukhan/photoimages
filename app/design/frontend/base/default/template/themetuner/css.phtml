@@ -1,0 +1,45 @@
+<?php /* @var $this Mage_Core_Block_Template */ ?>
+<?php $presetId = Mage::app()->getRequest()->getParam('themetuner_preset_id') ?>
+
+<script type="text/javascript">
+if( !themer.isAdmin() ){
+    themer.responsive.setup();
+} else {
+    <?php $adminDomain = Mage::helper('themetuner')->getAdminDomain() ?>
+    <?php if ($adminDomain) : ?>
+    document.domain = '<?php echo $adminDomain ?>';
+    <?php endif ?>
+    themer.captureIframeLoad();
+}
+</script>
+
+
+<link media="all" id="themetuner-css" rel="stylesheet" type="text/css" href="<?php echo $this->getUrl('css/index/css', array('in_admin' => Mage::registry('themetuner_in_admin'), 'preset_id' => $presetId, '_forced_secure' => Mage::app()->getStore()->isCurrentlySecure())); ?>" />
+
+<?php if (Mage::registry('themetuner_in_admin')) : ?>
+<link media="all" rel="stylesheet" type="text/css" href="<?php echo $this->getSkinUrl('css/themetuner/portlet.css') ?>" />
+
+<?php /* @var $this Oye_Themetuner_Block_Page_Info */ ?>
+    <script type="text/javascript"><!--
+if (typeof jQuery == "undefined") {
+    document.write('<' + 'script' + ' type="text/' + 'javascript" src="<?php echo $this->getJsUrl('themetuner/jquery-1.7.1.min.js') ?>"></' + 'script' + '>');
+}
+--></script>
+
+<script type="text/javascript"><!--
+if (typeof jQuery.ui == "undefined") {
+    var jQueryVersion = new Number(jQuery.fn.jquery.substr(0, 3));
+    var jQueryUiUrl = "<?php echo $this->getJsUrl('themetuner/jquery-ui-1.10.3.min.js') ?>";
+    var verNums = jQuery.fn.jquery.split('.');
+    if (!(parseInt(verNums[0]) >= 1 && parseInt(verNums[1]) >= 6)) { // if jQuery version is smaller than 1.6
+        jQueryUiUrl = "<?php echo $this->getJsUrl('themetuner/jquery-ui-1.8.17.custom.min.js') ?>";
+    }
+    document.write('<' + 'script' + ' type="text/' + 'javascript" src="' + jQueryUiUrl + '"></' + 'script' + '>');
+}
+var OyeThemetunerInfo = {
+    handles: <?php echo Zend_Json::encode(Mage::helper('themetuner/theme')->getHandles()) ?>, 
+    columns: <?php echo Zend_Json::encode(Mage::helper('themetuner/theme')->getCustomLayoutColumns()) ?>
+};
+--></script>
+
+<?php endif ?>

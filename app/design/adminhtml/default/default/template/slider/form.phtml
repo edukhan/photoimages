@@ -1,0 +1,77 @@
+<?php
+/**
+ * Slider form template
+ * 
+ * @author Activated
+ */
+?>
+<div class="entry-edit">
+    <?php echo $this->getFormHtml();?>
+</div>
+<?php echo $this->getChildHtml('form_after');?>
+<script type="text/javascript">
+	//<![CDATA[
+	<?php if(($block = $this->getLayout()->getBlock('slider_edit_tab_banner')) && ($_gridJsObject = $block->getJsObjectName())): ?>
+	var sliderBanners = $H(<?php echo $this->getBannerJson() ?>);
+	$('slider_main_in_position').value = sliderBanners.toQueryString();
+	
+	function checkboxEvent(grid, el, checked) {
+		if (checked) {
+			if(el.positionElement) {
+				el.positionElement.disabled = false;
+				sliderBanners.set(el.value, el.positionElement.value);
+			}
+		} else {
+			if (el.positionElement) {
+				el.positionElement.disabled = true;
+			}
+			sliderBanners.unset(el.value);
+		}
+		$('slider_main_in_position').value = sliderBanners.toQueryString();
+		grid.reloadParams = {'banner_referenced[]' : sliderBanners.keys()};
+	}
+	
+	function positionChange(e) {
+		var el = Event.element(e);
+		
+		if (el && el.checkboxElement && el.checkboxElement.checked) {
+			sliderBanners.set(el.checkboxElement.value, el.value);
+			$('slider_main_in_position').value = sliderBanners.toQueryString();
+		}
+	}
+	
+	function sliderBannerRowClick(grid, e) {
+		var tr		= Event.findElement(e, 'tr'),
+		 	input	= Event.element(e).tagName == 'INPUT';
+		
+		if (tr) {
+			var checkbox = Element.getElementsBySelector(tr, 'input');
+			
+			if (checkbox[0]) {
+				var checked = input ? checkbox[0].checked : !checkbox[0].checked;
+				<?php echo $_gridJsObject ?>.setCheckboxChecked(checkbox[0], checked);
+			}
+		}
+	}
+	
+	// Initialize grid rows
+	function sliderBannerRowInit(grid, row) {
+		var checkbox = $(row).getElementsByClassName('checkbox')[0],
+			position = $(row).getElementsByClassName('input-text')[0];
+		
+		if(checkbox && position) {
+			checkbox.positionElement = position;
+			position.checkboxElement = checkbox;
+			position.disabled = !checkbox.checked;
+			Event.observe(position,'keyup',positionChange);
+		}
+	}
+	<?php echo $_gridJsObject ?>.rowClickCallback = sliderBannerRowClick;
+	<?php echo $_gridJsObject ?>.initRowCallback = sliderBannerRowInit;
+	<?php echo $_gridJsObject ?>.checkboxCheckCallback = checkboxEvent;
+	<?php echo $_gridJsObject ?>.rows.each(function(row){
+		sliderBannerRowInit(<?php echo $_gridJsObject ?>, row);
+	});
+	<?php endif; ?>
+	//]]>
+</script>

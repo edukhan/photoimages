@@ -1,0 +1,53 @@
+<?php $helper = Mage::helper('themetuner'); ?>
+
+<div id="popup-saveas" class="themetuner-popup themetuner-popup-save">
+	<div class="title"><?php echo $helper->__('Save As') ?>..</div>
+    <div class="magento_close" id="popup-saveas-close"> </div>
+    
+    <div class="content">
+    	<div class="content-header">
+        	<h3><?php echo $helper->__('Tunes') ?></h3>
+        </div>
+        
+        <form action="" method="" id="popup-saveas-form">
+            <div class="grid">
+                <table cellspacing="0" class="data" id="presetGrid_table">
+                    <thead>
+                        <tr class="headings">
+                            <th>&nbsp;</th>
+                            <th><?php echo $helper->__('Tune') ?></th>
+                            <th><?php echo $helper->__('Live') ?></th>
+                            <th class="last"><?php echo $helper->__('Date Modified') ?></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+						<?php foreach (Mage::getModel('themetuner/preset')->getCollection() as $preset) { ?>
+                            <tr>
+                                <td class="a-center"><input type="radio" id="popup-saveas-preset-id--<?php echo $preset->getId() ?>" name="saveas_preset_id" value="<?php echo $preset->getId() ?>" /></td>
+                                <td><label for="popup-saveas-preset-id--<?php echo $preset->getId() ?>"><?php echo $preset->getName() ?></label></td>
+                                <td><?php echo $helper->getPresetLives($preset->getId()); ?></td>
+                                <td class="last"><?php echo Mage::helper('core')->formatDate($preset->getUpdatedAt(), $format = Mage_Core_Model_Locale::FORMAT_TYPE_MEDIUM, false); ?></td>
+                            </tr>
+                        <?php } ?>
+                        <tr>
+                            <td class="a-center"><input type="radio" id="popup-saveas-preset-id--0" name="saveas_preset_id" value="0" /></td>
+                            <td colspan="3" class="last">
+                            	<input type="text" name="saveas_preset_name" id="popup-saveas-preset-name" class="input-text" value="" />
+                                <div class="popup-errors" id="popup-saveas-errors" style="display: none;"></div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </form>
+        
+        <ul class="actions">
+            <li><button title="<?php echo $helper->__('Save') ?>" type="button" class="scalable save" id="popup-saveas-yes"><span><?php echo $helper->__('Save') ?></span></button></li>
+            <li><button title="<?php echo $helper->__('Cancel') ?>" type="button" class="scalable back" id="popup-saveas-cancel"><span style="padding:0;background:none;"><?php echo $helper->__('Cancel') ?></span></button></li>
+        </ul>
+    </div>
+</div>
+
+<script type="text/javascript">
+jQuery('#popup-saveas tr:even').addClass('even');
+</script>

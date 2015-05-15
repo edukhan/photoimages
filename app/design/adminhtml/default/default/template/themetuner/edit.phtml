@@ -1,0 +1,714 @@
+<?php
+$helper = $this->helper('themetuner');
+$store = $this->getStore(); ?>
+<?php $adminDomain = Mage::helper('themetuner')->getAdminDomain() ?>
+
+<script type="text/javascript">
+//<![CDATA[
+<?php if ($adminDomain) : ?>
+document.domain = '<?php echo $adminDomain ?>';
+<?php endif ?>
+var saveUrl = '<?php echo $this->getUrl("*/*/save/"); ?>';
+var backUrl = '<?php echo $this->getUrl("themetuner/adminhtml_themetuner/")?>';
+var themetunerSkinUrl = '<?php echo $this->getSkinUrl('themetuner/'); ?>';
+var baseJsUrl = '<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_JS); ?>';
+var storeId = '<?php echo $store->getId()?>';
+var LicenseNoticeUrl = '<?php echo $this->getUrl("*/*/licenseNotice/"); ?>';
+var getFileBrowserUrl = function(targetID)
+{
+    return '<?php echo $this->getUrl('adminhtml/cms_wysiwyg_images',array('use_file_url'=>1,'store'=>$store->getId(),'type'=>'image'))?>'+'target_element_id/'+targetID+'/';
+}
+function openFileBrowser(id){
+    fileBrowserlink = "<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_JS);?>pdw/index.php?editor=standalone&returnID=" + id;
+    window.open(fileBrowserlink,'pdwfilebrowser', 'width=1000,height=650,scrollbars=no,toolbar=no,location=no');
+}
+var savePresetSelectionAjaxUrl = '<?php echo $this->getUrl("themetuner/adminhtml_themetuner/savePresetSelection")?>';
+var theme = '<?php echo $this->getTheme(); ?>';
+var isNewTheme = <?php echo $this->getPresetId() ? 'false' : 'true' ?>;
+var tuneName = "<?php echo $this->escapeHtml($this->getName()) ?>";
+var saveTuneAsButtonText = "<?php echo $helper->__('Save tune as')?>";
+var saveAndCloseButtonText = "<?php echo $helper->__('Save and close')?>";
+//]]>
+</script>
+
+<button id="btn-logo" class="scalable back"><span><?php echo $helper->__('Change logo') ?></span></button>
+<button id="btn-logo-clear" class="scalable back"><span>&nbsp;</span></button>
+
+<input type="hidden" id="logo_image" value="<?php echo $this->getLogo() ?>" />
+<input type="hidden" id="logo_orig_image" value="<?php echo $this->getOriginalLogo() ?>" />
+<input type="hidden" id="layout_save_url" value="<?php echo $this->getLayoutSaveUrl() ?>" />
+<input type="hidden" id="add_block_url" value="<?php echo $this->getAddBlockUrl() ?>" />
+<input type="hidden" id="form_key" value="<?php echo Mage::getSingleton('core/session')->getFormKey() ?>" />
+<input type="hidden" id="empty_breadcrumbs_text" value="<?php echo $this->htmlEscape(Mage::helper('themetuner')->__('No items currently selected')) ?>" />
+
+<div class="themetuner-licence" style="display:none;">
+	<p>This domain is not licensed to use Magstudio Visual Designer.<br />
+    You can buy license from <a href="http://www.magdeveloper.com" target="_blank">http://www.magdeveloper.com</a></p>
+</div>
+
+<div id="themetuner-iframe-scroll">
+
+	<img src="" id="themetuner-device-img" style="display: none;"/>
+
+    <div id="themetuner-iframe-container">
+        <ul id="currentSelector"></ul>
+        <div id="themetuner-frame-holder">
+            <iframe style="display:none;" src="<?php echo $store->getBaseUrl(Mage_Core_Model_Store::URL_TYPE_LINK, $store->isCurrentlySecure())?>?in_admin=true&themetuner_preset_id=<?php echo $this->getPresetId() ?>&themetuner_theme=<?php echo urlencode($this->getTheme()) ?>" frameborder="0" id="magento-themetuner-frame" width="100%" height="100%"></iframe>
+       
+		</div>
+    </div>
+</div>
+
+<div id="themetuner">
+    <div id="themetuner-header"> 
+        <h3><?php echo $helper->__('ThemeTuner') ?></h3>
+        
+        <div class="header-right">
+            <!-- <button id="btn-reset" class="scalable back"><span><?php echo $helper->__('Restore Defaults') ?></span></button>-->
+            <button id="btn-save-as" class="scalable save"><span><?php echo $helper->__('Save As') ?>..</span></button>
+            <button id="btn-save" class="scalable save"><span><?php echo $helper->__('Save') ?></span></button>
+            <button id="btn-close" class="scalable delete"><span><?php echo $helper->__('Close') ?></span></button>
+        </div>
+    </div>
+
+    <div id="themetuner-tabs">
+        <input type="radio" name="mode" id="mode-view" value="view" /> <label for="mode-view"><div class="tab tab-view"><?php echo $helper->__('Navigating') ?></div></label>
+        <input type="radio" name="mode" id="mode-edit" value="edit" checked="checked" /> <label for="mode-edit"><div class="tab tab-edit active"><?php echo $helper->__('Styling') ?></div></label>
+        <input type="radio" name="mode" id="mode-layout" value="layout" /> <label for="mode-layout"><div class="tab tab-layout"><?php echo $helper->__('Layouting') ?></div></label>
+        <input type="radio" name="mode" id="mode-devices" value="devices" /> <label for="mode-devices"><div class="tab tab-devices"><?php echo $helper->__('Devices') ?></div></label>
+    </div>
+
+    <div id="themetuner-top-bar">
+
+        <select id="themetuner-bulk" name="themetuner-bulk">
+            <option value="0"><?php echo $helper->__('Apply to selected') ?></option>
+            <option value="1"><?php echo $helper->__('Apply to similar') ?></option>
+        </select>
+
+    </div>
+
+	<div id="themetuner-intro" class="themetuner-intro">
+	    <div class="intro-content">
+            <div class="component-THEMER-MG-DESIGN" style="display: none;">
+                <ul class="messages">
+                    <li class="notice-msg">
+                        <ul>
+                            <li>
+                                <span><?php echo $this->__('Magstudio Design component is currently disabled. <br />If you would like to use layout component and save the changes you make then please purchase a valid license here:<br /><a target="_mg" href="http://www.magdeveloper.com">http://www.magdeveloper.com</a>') ?></span>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            
+            <div id="welcome-message" class="themer-box-text" style="display:none;">
+	
+		        <h3>Welcome to MagStudio Visual Designer!</h3>
+		        <p>You are currently in Navigation mode. This mode enables you to browse through your theme/store. To change the theme styling or layout just simply select the corresponding tab from above and follow the instructions. When you want to modify specific page of the store just click navigation tab again and move to the page you wish to change. When you are finished just save you work and you are done.</p>
+				<p><strong>Note:</strong> <em>If you wish to modify the store content shown in Themer go to back to the theme list view and select settings.</em></p>
+				<p><b>Extension: Drop-shipment Module</b><br/>
+				<a href="https://webshopimporter.com" target="_blank"> <img src="http://www.magdeveloper.com/magstudio/wp-content/uploads/2014/11/box-2-512-130x130.png" alt="Smiley face" height="42" width="42">  </a>
+
+            </div>
+
+            <div id="styling-message" class="themer-box-text">
+
+                <h3>Change styling</h3>
+                <p>Please click anywhere on the page to select element you want to start styling. Styling panel will appear here with all attributes that can be modified for selected element. To choose next element just click on it on you theme and repeat the process.</p>
+                <p>If you want to change another page on your site just select navigation tab and browse to the page you wish to modify. When arriving to page you were looking for just go back to styling tab and select element.</p>
+                <p>You can also change the logo here - just move you mouse over it and a button appears.</p>
+                <p><strong>Note:</strong> <em>Using "save as" option you can create several versions of your theme - that could be useful for subcategories or seasonal campaigns etc.</em></p>
+
+            </div>
+		</div>
+    </div>
+    
+    <div id="themetuner-intro-styles" class="themetuner-intro" style="display:none;">
+	    <div class="intro-content">
+            <div class="component-THEMER-MG-DESIGN" style="display: none;">
+                <ul class="messages">
+                    <li class="notice-msg">
+                        <ul>
+                            <li>
+                                <span><?php echo $this->__('Magstudio Design component is currently disabled. <br />If you would like to use layout component and save the changes you make then please purchase a valid license here:<br /><a target="_mg" href="http://www.magdeveloper.com">http://www.magdeveloper.com</a>') ?></span>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <div class="themer-box-text"></div>
+		</div>
+    </div>
+    
+    <div class="scroller">
+        <div class="padding">
+			<?php if($store->getId()):?>
+                <input type="hidden" id="store_id" name="store_id" value="<?php echo $store->getId()?>" />
+                <input type="hidden" id="presetId" name="presetId" value="<?php echo $this->getPresetId()?>" />
+            <?php endif;?>
+
+            <div class="content fontsColorsStyles">
+
+                <div class="box" id="themetuner-values">
+                    <div class="component-THEMER-MG-DESIGN" style="display: none;">
+                        <ul class="messages">
+                            <li class="notice-msg">
+                                <ul>
+                                    <li>
+                                        <span><?php echo $this->__('Magstudio Design component is currently disabled. <br />If you would like to use layout component and save the changes you make then please purchase a valid license here:<br /><a target="_mg" href="http://www.magdeveloper.com">http://www.magdeveloper.com</a>') ?></span>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <table border="0" cellpadding="0" cellspacing="0">
+                        <tr>
+                            <td>
+                                <div class="entry-edit">
+                                    <div class="entry-edit-head collapseable">
+                                        <a id="style_fonttext-head" href="#" onclick="Fieldset.toggleCollapse('style_fonttext'); return false;" class="open"><?php echo $helper->__('Font/text') ?></a>
+                                    </div>
+                                    <input type="hidden" id="style_fonttext-state" value="1" />
+
+                                    <fieldset class="config collapseable" id="style_fonttext">
+                                        <legend><?php echo $helper->__('Font/text') ?></legend>
+
+                                <div class="item">
+                                    <label for="font-family"><?php echo $helper->__('Font') ?></label>
+                                    <select name="" id="font-family">
+                                        <option value="">(<?php echo $helper->__('Inherited') ?>)</option>
+                                        <option value="Arial">Arial</option>
+                                        <option value="Arial Black">Arial Black</option>
+                                        <option value="Comic Sans MS">Comic Sans MS</option>
+                                        <option value="Courier New">Courier New</option>
+                                        <option value="Georgia">Georgia</option>
+                                        <option value="Impact">Impact</option>
+                                        <option value="Tahoma">Tahoma</option>
+                                        <option value="Times New Roman">Times New Roman</option>
+                                        <option value="Trebuchet MS">Trebuchet MS</option>
+                                        <option value="Verdana">Verdana</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="item">
+                                    <label for="font-size"><?php echo $helper->__('Font Size') ?></label>
+                                    <div class="inline">
+                                        <input type="text" name="" id="font-size" class="range" /> px
+                                        <div id="slider-font-size" class="slider"></div>
+                                    </div>
+                                </div>
+                                
+                                <div class="item">
+                                    <label for="color"><?php echo $helper->__('Font Color') ?></label>
+                                    <div class="inline"><input type="text" name="" id="color" class="color" /></div>
+                                </div>
+                                
+                                <div class="item">
+                                    <label for="font-weight"><?php echo $helper->__('Font Weight') ?></label>
+                                    <select name="" id="font-weight">
+                                        <option disabled="disabled">-</option>
+
+                                        <option value="">(<?php echo $helper->__('Inherited') ?>)</option>
+                                        <option value="normal"><?php echo $helper->__('Normal') ?></option>
+                                        <option value="bold"><?php echo $helper->__('Bold') ?></option>
+                                    </select>
+                                </div>
+                                
+                                <div class="item">
+                                    <label for="font-style"><?php echo $helper->__('Font Style') ?></label>
+
+                                    <select name="" id="font-style">
+                                        <option disabled="disabled">-</option>
+                                        <option value="">(<?php echo $helper->__('Inherited') ?>)</option>
+                                        <option value="normal"><?php echo $helper->__('Normal') ?></option>
+                                        <option value="italic"><?php echo $helper->__('Italic') ?></option>
+                                    </select>
+                                </div>
+                                
+                                <div class="item">
+                                    <label for="text-transform"><?php echo $helper->__('Text Transform') ?></label>
+                                    <select name="" id="text-transform">
+                                        <option disabled="disabled">-</option>
+                                        <option value="">(<?php echo $helper->__('Inherited') ?>)</option>
+                                        <option value="none"><?php echo $helper->__('None') ?></option>
+                                        <option value="uppercase"><?php echo $helper->__('UPPERCASE') ?></option>
+
+                                        <option value="lowercase"><?php echo $helper->__('lowercase') ?></option>
+                                        <option value="capitalize"><?php echo $helper->__('Capitalize') ?></option>
+                                    </select>
+                                </div>
+
+                                <div class="item">
+                                    <label for="direction"><?php echo $helper->__('Text Direction') ?></label>
+                                    <select name="" id="direction">
+                                         <option disabled="disabled">-</option>
+                                         <option value="">(<?php echo $helper->__('Inherited') ?>)</option>
+                                         <option value="ltr"><?php echo $helper->__('left-to-right') ?></option>
+                                         <option value="rtl"><?php echo $helper->__('right-to-left') ?></option>
+                                    </select>
+                                </div>
+                                
+                                <div class="item">
+                                    <label for="letter-spacing"><?php echo $helper->__('Letter Spacing') ?></label>
+                                    <div class="inline">
+
+                                        <input type="text" name="" id="letter-spacing" class="range" /> px
+                                        <div id="slider-letter-spacing" class="slider"></div>
+                                    </div>
+                                </div>
+                                
+                                <div class="item">
+                                    <label for="text-decoration"><?php echo $helper->__('Text Decoration') ?></label>
+                                    <select name="" id="text-decoration">
+                                        <option disabled="disabled">-</option>
+
+                                        <option value="">(<?php echo $helper->__('Inherited') ?>)</option>
+                                        <option value="none"><?php echo $helper->__('None') ?></option>
+                                        <option value="underline"><?php echo $helper->__('Underline') ?></option>
+                                        <option value="overline"><?php echo $helper->__('Overline') ?></option>
+                                        <option value="line-through"><?php echo $helper->__('Strikethrough') ?></option>
+                                    </select>
+                                </div>
+                                
+                                <div class="item">
+                                    <label for="text-align"><?php echo $helper->__('Text Alignment') ?></label>
+                                    <select name="" id="text-align">
+                                        <option disabled="disabled">-</option>
+                                        <option value="">(<?php echo $helper->__('Inherited') ?>)</option>
+                                        <option value="left"><?php echo $helper->__('Left Align') ?></option>
+
+                                        <option value="right"><?php echo $helper->__('Right Align') ?></option>
+                                        <option value="center"><?php echo $helper->__('Center Align') ?></option>
+                                        <option value="justify"><?php echo $helper->__('Justified (Full)') ?></option>
+                                    </select>
+                                </div>
+                                
+                                <div class="item">
+                                    <label for="line-height"><?php echo $helper->__('Line Height') ?></label>
+
+                                    <div class="inline">
+                                        <input type="text" name="" id="line-height" class="range" /> px
+                                        <div id="slider-line-height" class="slider"></div>
+                                    </div>
+                                </div>
+
+                                    </fieldset>
+                                </div>
+                                
+                                <div class="entry-edit">
+                                    <div class="entry-edit-head collapseable">
+                                        <a id="style_border-head" href="#" onclick="Fieldset.toggleCollapse('style_border'); return false;" class="open"><?php echo $helper->__('Border') ?></a>
+                                    </div>
+                                    <input type="hidden" id="style_border-state" value="0" />
+
+                                    <fieldset class="config collapseable" id="style_border">
+                                        <legend><?php echo $helper->__('Border') ?></legend>
+
+                                
+                                <div class="item">
+                                    <label for="border"><?php echo $helper->__('Border') ?></label>
+
+                                    <select name="" id="border">
+                                        <option disabled="disabled">-</option>
+                                        <option value="">(<?php echo $helper->__('Inherited') ?>)</option>
+                                        <option value="none"><?php echo $helper->__('None') ?></option>
+                                        <option value="top"><?php echo $helper->__('Top') ?></option>
+                                        <option value="right"><?php echo $helper->__('Right') ?></option>
+
+                                        <option value="bottom"><?php echo $helper->__('Bottom') ?></option>
+                                        <option value="left"><?php echo $helper->__('Left') ?></option>
+                                        <option value="full"><?php echo $helper->__('Full') ?></option>
+                                    </select>
+                                </div>
+                                
+                                <div class="item">
+                                    <label for="border-width"><?php echo $helper->__('Border Size') ?></label>
+
+                                    <div class="inline">
+                                        <input type="text" name="" id="border-width" class="range" /> px
+                                        <div id="slider-border-width" class="slider"></div>
+                                    </div>
+                                </div>
+                                
+                                <div class="item">
+                                    <label for="border-style"><?php echo $helper->__('Border Style') ?></label>
+                                    <select name="" id="border-style">
+
+                                        <option disabled="disabled">-</option>
+                                        <option value="">(<?php echo $helper->__('Inherited') ?>)</option>
+                                        <option value="solid"><?php echo $helper->__('Solid') ?></option>
+                                        <option value="dotted"><?php echo $helper->__('Dotted') ?></option>
+                                        <option value="dashed"><?php echo $helper->__('Dashed') ?></option>
+                                    </select>
+                                </div>
+                                
+                                <div class="item">
+                                    <label for="border-color"><?php echo $helper->__('Border Color') ?></label>
+                                    <div class="inline"><input type="text" name="" id="border-color" class="color" /></div>
+                                </div>
+                                
+                                <div class="item">
+                                    <label for="border-radius"><?php echo $helper->__('Border Radius') ?></label>
+
+                                    <div class="inline">
+                                        <input type="text" name="" id="border-radius" class="range" /> px
+                                        <div id="slider-border-radius" class="slider"></div>
+                                    </div>
+                                </div>
+                                
+                                    </fieldset>
+                                </div>
+                                
+                                <div class="entry-edit">
+                                    <div class="entry-edit-head collapseable">
+                                        <a id="style_background-head" href="#" onclick="Fieldset.toggleCollapse('style_background'); return false;" class="open"><?php echo $helper->__('Background') ?></a>
+                                    </div>
+                                    <input type="hidden" id="style_background-state" value="0" />
+
+                                    <fieldset class="config collapseable" id="style_background">
+                                        <legend><?php echo $helper->__('Background') ?></legend>
+                                
+                                <div class="item">
+                                    <label for="background-color"><?php echo $helper->__('Background Color') ?></label>
+
+                                    <div class="inline"><input type="text" name="" id="background-color" class="color" /></div>
+                                </div>
+                                
+                                <div class="item">
+                                    <label for="background-image"><?php echo $helper->__('Background Image') ?></label>
+                                    
+                                    <div class="inline">
+                                        <input type="text" name="background-image" id="background-image" class="background" />
+                                        <a href="javascript:void(0);" onmousedown="return false;" class="browse" title="Browse..">Browse...</a>
+                                    </div>
+                                </div>
+                                
+                                <div class="item">
+                                    <label for="background-position-x"><?php echo $helper->__('Background Top') ?></label>
+
+                                    <div class="inline">
+                                    	<a href="#" class="unit" id="unit-x" title="toggle units">px</a>
+                                        <input type="text" name="" id="background-position-x" class="range" />
+                                        <div id="slider-background-x" class="slider"></div>
+                                    </div>
+                                </div>
+                                
+                                <div class="item">
+                                    <label for="background-position-y"><?php echo $helper->__('Background Left') ?></label>
+                                    <div class="inline">
+                                    	<a href="#" class="unit" id="unit-y" title="toggle units">px</a>
+                                        <input type="text" name="" id="background-position-y" class="range" />
+                                        <div id="slider-background-y" class="slider"></div>
+                                    </div>
+                                </div>
+                                
+                                <div class="item">
+                                    <label for="background-repeat"><?php echo $helper->__('Background Repeat') ?></label>
+                                    <select name="" id="background-repeat">
+                                        <option disabled="disabled">-</option>
+
+                                        <option value="">(<?php echo $helper->__('Not Specified') ?>)</option>
+                                        <option value="no-repeat"><?php echo $helper->__("Don't Repeat") ?></option>
+                                        <option value="repeat-x"><?php echo $helper->__('Repeat Horizontal') ?></option>
+                                        <option value="repeat-y"><?php echo $helper->__('Repeat Vertical') ?></option>
+                                        <option value="repeat"><?php echo $helper->__('Repeat') ?></option>
+                                    </select>
+                                </div>
+
+                                    </fieldset>
+                                </div>
+                                
+                                <div class="entry-edit">
+                                    <div class="entry-edit-head collapseable">
+                                        <a id="style_margin-head" href="#" onclick="Fieldset.toggleCollapse('style_margin'); return false;" class="open"><?php echo $helper->__('Margin') ?></a>
+                                    </div>
+                                    <input type="hidden" id="style_margin-state" value="0" />
+
+                                    <fieldset class="config collapseable" id="style_margin">
+                                        <legend><?php echo $helper->__('Margin') ?></legend>
+                                
+                                <div class="item">
+                                    <label for="margin-top"><?php echo $helper->__('Margin Top') ?></label>
+                                    <div class="inline">
+                                        <input type="text" name="" id="margin-top" class="range" /> px
+                                        <div id="slider-margin-top" class="slider"></div>
+                                    </div>
+                                </div>
+                                
+                                <div class="item">
+                                    <label for="margin-right"><?php echo $helper->__('Margin Right') ?></label>
+                                    <div class="inline">
+                                        <input type="text" name="" id="margin-right" class="range" /> px
+                                        <div id="slider-margin-right" class="slider"></div>
+                                    </div>
+                                </div>
+                                
+                                <div class="item">
+                                    <label for="margin-bottom"><?php echo $helper->__('Margin Bottom') ?></label>
+                                    <div class="inline">
+                                        <input type="text" name="" id="margin-bottom" class="range" /> px
+                                        <div id="slider-margin-bottom" class="slider"></div>
+                                    </div>
+                                </div>
+                                
+                                <div class="item">
+                                    <label for="margin-left"><?php echo $helper->__('Margin Left') ?></label>
+
+                                    <div class="inline">
+                                        <input type="text" name="" id="margin-left" class="range" /> px
+                                        <div id="slider-margin-left" class="slider"></div>
+                                    </div>
+                                </div>
+
+                                    </fieldset>
+                                </div>
+                                
+                                <div class="entry-edit">
+                                    <div class="entry-edit-head collapseable">
+                                        <a id="style_padding-head" href="#" onclick="Fieldset.toggleCollapse('style_padding'); return false;" class="open"><?php echo $helper->__('Padding') ?></a>
+                                    </div>
+                                    <input type="hidden" id="style_padding-state" value="0" />
+
+                                    <fieldset class="config collapseable" id="style_padding">
+                                        <legend><?php echo $helper->__('Padding') ?></legend>
+                                
+                                <div class="item">
+                                    <label for="padding-top"><?php echo $helper->__('Padding Top') ?></label>
+                                    <div class="inline">
+
+                                        <input type="text" name="" id="padding-top" class="range" /> px
+                                        <div id="slider-padding-top" class="slider"></div>
+                                    </div>
+                                </div>
+                                
+                                <div class="item">
+                                    <label for="padding-right"><?php echo $helper->__('Padding Right') ?></label>
+                                    <div class="inline">
+                                        <input type="text" name="" id="padding-right" class="range" /> px
+                                        <div id="slider-padding-right" class="slider"></div>
+
+                                    </div>
+                                </div>
+                                
+                                <div class="item">
+                                    <label for="padding-bottom"><?php echo $helper->__('Padding Bottom') ?></label>
+                                    <div class="inline">
+                                        <input type="text" name="" id="padding-bottom" class="range" /> px
+                                        <div id="slider-padding-bottom" class="slider"></div>
+                                    </div>
+
+                                </div>
+                                
+                                <div class="item">
+                                    <label for="padding-left"><?php echo $helper->__('Padding Left') ?></label>
+                                    <div class="inline">
+                                        <input type="text" name="" id="padding-left" class="range" /> px
+                                        <div id="slider-padding-left" class="slider"></div>
+                                    </div>
+                                </div>
+
+                                    </fieldset>
+                                </div>
+                                
+                                <div class="entry-edit">
+                                    <div class="entry-edit-head collapseable">
+                                        <a id="style_special-head" href="#" onclick="Fieldset.toggleCollapse('style_special'); return false;" class="open"><?php echo $helper->__('Special') ?></a>
+                                    </div>
+                                    <input type="hidden" id="style_special-state" value="0" />
+
+                                    <fieldset class="config collapseable" id="style_special">
+                                        <legend><?php echo $helper->__('Special') ?></legend>
+                                
+                                <div class="item dimension">
+                                    <label for="width"><?php echo $helper->__('Width') ?> / <?php echo $helper->__('Height') ?></label>
+                                    <input type="text" name="" id="width" class="dimension" /> &nbsp;&nbsp;/&nbsp;&nbsp;
+                                    <input type="text" name="" id="height" class="dimension" /> px
+                                </div>
+                                
+                                <div class="item">
+                                    <label for="display"><?php echo $helper->__('Display') ?></label>
+                                    <select name="" id="display">
+                                        <option disabled="disabled">-</option>   
+                                        <option value="inline"><?php echo $helper->__('Inline') ?></option>
+                                        <option value="block"><?php echo $helper->__('Block') ?></option>
+                                        <option value="flex"><?php echo $helper->__('Flex') ?></option>
+                                        <option value="inline-block"><?php echo $helper->__('Inline-block') ?></option>
+                                       <!--  <option value="inline-flex"><?php //echo $helper->__('Inline-flex') ?></option>
+                                        <option value="inline-table"><?php //echo $helper->__('Inline-table') ?></option> -->
+                                        <option value="list-item"><?php echo $helper->__('List-item') ?></option> 
+                                        <!-- <option value="run-in"><?php //echo $helper->__('Run-in') ?></option>
+                                        <option value="table"><?php //echo $helper->__('Table') ?></option>
+                                        <option value="table-caption"><?php //echo $helper->__('Table-caption') ?></option>
+                                        <option value="table-column-group"><?php //echo $helper->__('Table-column-group') ?></option>
+                                        <option value="table-header-group"><?php //echo $helper->__('Table-header-group') ?></option>
+                                        <option value="table-footer-group"><?php //echo $helper->__('Table-footer-group') ?></option>
+                                        <option value="table-row-group"><?php //echo $helper->__('Table-row-group') ?></option>
+                                        <option value="table-cell"><?php //echo $helper->__('Table-cell') ?></option>
+                                        <option value="table-column"><?php //echo $helper->__('Table-column') ?></option>
+                                        <option value="table-row"><?php //echo $helper->__('Table') ?></option> -->
+                                        <option value="none"><?php echo $helper->__('None') ?></option>
+                                        <option value="initial"><?php echo $helper->__('Initial') ?></option>
+                                        <option value="inherit"><?php echo $helper->__('Inherit') ?></option>
+                                    </select>
+                                </div>
+
+                                <div class="item">
+                                    <label for="float"><?php echo $helper->__('Float') ?></label>
+                                    <select name="" id="float">
+                                        <option disabled="disabled">-</option>
+                                        <option value="">(<?php echo $helper->__('Inherited') ?>)</option>
+                                        <option value="none"><?php echo $helper->__('None') ?></option>
+                                        <option value="left"><?php echo $helper->__('Left') ?></option>
+                                        <option value="right"><?php echo $helper->__('Right') ?></option>
+                                    </select>
+                                </div>
+
+                                <div class="item">
+                                    <label for="clear"><?php echo $helper->__('Clear') ?></label>
+                                    <select name="" id="clear">
+                                        <option disabled="disabled">-</option>
+                                        <option value="inherit">(<?php echo $helper->__('Inherited') ?>)</option>
+                                        <option value="none"><?php echo $helper->__('None') ?></option>
+                                        <option value="left"><?php echo $helper->__('Left') ?></option>
+                                        <option value="right"><?php echo $helper->__('Right') ?></option>
+                                        <option value="both"><?php echo $helper->__('Both') ?></option>
+                                    </select>
+                                </div>
+                                    </fieldset>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="box" id="themetuner-layout-values" style="display: none;">
+                    <div class="component-THEMER-MG-LAYOUT" style="display: none;">
+                        <ul class="messages">
+                            <li class="notice-msg">
+                                <ul>
+                                    <li>
+                                        <span><?php echo $this->__('Magstudio Layout component is currently disabled. <br />If you would like to use layout component and save the changes you make then please purchase a valid license here:<br /><a target="_mg" href="http://www.magdeveloper.com">http://www.magdeveloper.com</a>') ?></span>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                    
+					<div class="themer-box-content">
+
+	                    <table border="0" cellpadding="0" cellspacing="0">
+	                        <tr>
+	                            <td>
+	                                <div class="item">
+	                                    <label for="layout-context"><?php echo $helper->__('Layout Context') ?></label>
+	                                    <select name="" id="layout-context">
+	                                        <option value="default"><?php echo $helper->__('All Pages') ?></option>
+	                                    </select>
+	                                </div>
+	
+	                                <div class="item">
+	                                    <label for="page-template"><?php echo $helper->__('Columns') ?></label>
+	                                    <select name="" id="page-template">
+	                                        <option value=""><?php echo $helper->__('Default') ?></option>
+	                                        <option value="page_one_column"><?php echo $helper->__('1 column') ?></option>
+	                                        <option value="page_two_columns_left"><?php echo $helper->__('2 columns with left sidebar') ?></option>
+	                                        <option value="page_two_columns_right"><?php echo $helper->__('2 columns with right sidebar') ?></option>
+	                                        <option value="page_three_columns"><?php echo $helper->__('3 columns') ?></option>
+	                                        <option value="page_empty"><?php echo $helper->__('empty') ?></option>
+	                                    </select>
+	                                </div>
+	
+	                            </td>
+	                        </tr>
+	                    </table>
+
+					</div>
+					
+                    <div class="themer-box-text">
+                    
+                    	<h3>Managing layouts</h3>
+                    	<p>Here you can change the columns of the the page. If you navigate around the site you find that you can change the columns in different context - all pages or any specific page you have navigated to.</p>
+                    	<p>Also you can drag and drop orange blocks that are within blue container to change the order or to change the container they are in. You can also delete or add new blocks. To add new block just clicking “add new block” in any container and you have list of different blocks to choose from including your own block you can create using magento Static blocks.</p>
+                    	<p><strong>Note:</strong> <em>By using your own static blocks you can create unlimited amount of solution - it time to get creative!</em></p>
+                    
+                    </div>
+
+                </div>
+
+                    <div class="box" id="themetuner-devices" style="display: none;">
+
+                    	
+						<div class="themer-box-content">
+                    
+                            <ul>
+                                <li><a id="desktop" href="#" data-screen="desktop" class="active">desktop</a></li>
+                                <li><a id="tablet-landscape" data-screen="tablet-landscape" href="#">tablet-landscape</a></li>
+                                <li><a id="tablet-portrait" data-screen="tablet-portrait" href="#">tablet-portrait</a></li>
+                                <li><a id="iphone-landscape" data-screen="mobile-landscape" href="#">iphone-landscape</a></li>
+                                <li><a id="iphone-portrait" data-screen="mobile-portrait" href="#">iphone-portrait</a></li>
+                            </ul>
+	                        
+						</div>
+						
+						<div class="themer-box-text">
+	                    	
+	                    	<h3>Device selector</h3>
+							<p>Here you can test your theme with different devices to make sure your site looks good everywhere!</p>
+	                    
+                    	</div>
+						
+
+                    </div>
+
+                </div>
+
+        </div>
+    </div>
+</div>
+
+<div id="save-confirm-popup" class="themetuner-popup themetuner-popup-save" style="display: none;">
+	<div class="title"><?php echo $helper->__('Close') ?></div>
+    <div class="magento_close" id="popup-save-close"> </div>
+    
+    <div class="content">
+    	<p>
+    	<?php echo $helper->__('You have made changes to %stune.', '<strong id="save-confirm-popup-tune-name"></strong> ') ?><br />
+    	<?php echo $helper->__('Do you want to save changes before closing?') ?>
+    	</p>
+        
+        <ul class="actions">
+            <li class="first"><?php echo $helper->getButtonHtml(array('class' => 'delete', 'id' => 'popup-save-no', 'title' => $helper->__('Close without saving'))) ?></li>
+            <li><?php echo $helper->getButtonHtml(array('class' => 'save', 'id' => 'popup-save-yes', 'title' => $helper->__('Save and close'))) ?></li>
+            <li><?php echo $helper->getButtonHtml(array('class' => 'back', 'id' => 'popup-save-cancel', 'title' => $helper->__('Cancel'))) ?></li>
+        </ul>
+    </div>
+</div>
+
+<div id="save-reset-popup" class="themetuner-popup themetuner-popup-save" style="display: none;">
+	<div class="title"><?php echo $helper->__('Restore defaults') ?></div>
+    <div class="magento_close" id="popup-reset-close"></div>
+    
+    <div class="content">
+    	<p><?php echo $helper->__('Are you sure you want to restore default styles?') ?><br />
+    	<?php echo $helper->__('You will loose all your changes for current tune.') ?></p>
+        
+        <ul class="actions">
+            <li><?php echo $helper->getButtonHtml(array('class' => 'save', 'id' => 'popup-reset-yes', 'title' => $helper->__('Yes'))) ?></li>
+            <li><?php echo $helper->getButtonHtml(array('class' => 'back', 'id' => 'popup-reset-cancel', 'title' => $helper->__('Cancel'))) ?></li>
+        </ul>
+    </div>
+</div>
+
+<div id="invalid-license-popup" class="themetuner-popup" style="display: none;">
+    <div class="title"><?php echo $helper->__('Warning') ?></div>
+    <div class="magento_close" id="popup-activate-close"></div>
+    
+    <div class="content">
+        <h3 class="title"><?php echo $helper->__('License invalid for this domain') ?></h3>   
+        <div class="msg"><?php echo $helper->__('') ?></div>
+        <ul class="actions">
+            <li><?php echo $helper->getButtonHtml(array('class' => 'save', 'id' => 'popup-activate-ok', 'title' => $helper->__('Ok'))) ?></li>
+        </ul>
+    </div>
+</div>

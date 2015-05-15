@@ -1,0 +1,70 @@
+<?xml version="1.0" ?>
+<config>
+	<tabs>
+		<slider translate="label">
+			<label>Activated Extensions</label>
+			<sort_order>100</sort_order>
+		</slider>
+	</tabs>
+	<sections>
+		<slider>
+			<class>separator-top</class>
+			<label>Slider</label>
+			<tab>slider</tab>
+			<frontend_type>text</frontend_type>
+			<sort_order>500</sort_order>
+			<show_in_default>1</show_in_default>
+			<show_in_website>1</show_in_website>
+			<show_in_store>1</show_in_store>
+			<groups>
+				<view translate="label">
+					<label>General Settings</label>
+					<frontend_type>text</frontend_type>
+					<sort_order>10</sort_order>
+					<show_in_default>1</show_in_default>
+					<show_in_website>1</show_in_website>
+					<show_in_store>1</show_in_store>
+					<fields>
+						<enabled translate="label">
+							<label>Enable Slider on Frontend</label>
+							<frontend_type>select</frontend_type>
+							<source_model>adminhtml/system_config_source_yesno</source_model>
+							<sort_order>10</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</enabled>
+						<jquery translate="label">
+							<label>Enable Module jQuery</label>
+							<frontend_type>select</frontend_type>
+							<source_model>adminhtml/system_config_source_yesno</source_model>
+							<sort_order>13</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</jquery>
+					</fields>
+				</view>
+				<placement translate="label">
+					<label>Placement</label>
+					<frontend_type>text</frontend_type>
+					<sort_order>11</sort_order>
+					<show_in_default>1</show_in_default>
+					<show_in_website>1</show_in_website>
+					<show_in_store>1</show_in_store>
+					<fields>
+						<home translate="label">
+							<label>Display on Home Page</label>
+							<frontend_type>select</frontend_type>
+							<source_model>slider/slider</source_model>
+							<sort_order>11</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</home>
+					</fields>
+				</placement>
+			</groups>
+		</slider>
+	</sections>
+</config>

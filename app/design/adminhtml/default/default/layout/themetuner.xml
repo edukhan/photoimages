@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<layout>
+    <themetuner_adminhtml_themetuner_index>    	
+        <reference name="head">
+        	<action method="addCss"><stylesheet>themetuner/popup.css</stylesheet></action>
+            <action method="addCss"><stylesheet>themetuner/colorbox.css</stylesheet></action>
+        	<action method="addJs"><script>themetuner/jquery-1.7.1.min.js</script></action>
+        	<action method="addJs"><script>themetuner/jquery.colorbox-min.js</script></action>
+        	<action method="addJs"><script>themetuner/jquery.json-2.3.min.js</script></action>
+        	<action method="addJs"><script>themetuner/grid.js</script></action>
+    	</reference>
+        <reference name="content">
+            <block type="themetuner/adminhtml_preset" name="preset_listing" />
+        </reference>
+    </themetuner_adminhtml_themetuner_index>
+    <themetuner_adminhtml_themetuner_edit> 
+    	<remove name="header" />   	
+    	<remove name="global_notices" />   	
+    	<remove name="notifications" />  	
+        <reference name="head">     
+        	<action method="addCss"><stylesheet>themetuner/styles.css</stylesheet></action>
+			<action method="addCss"><stylesheet>themetuner/popup.css</stylesheet></action>
+        	<action method="addCss"><stylesheet>themetuner/colorbox.css</stylesheet></action>
+        	<action method="addJs"><script>themetuner/jquery-1.7.1.min.js</script></action>
+        	<action method="addJs"><script>themetuner/jquery-ui-1.10.3.min.js</script></action>
+        	<action method="addJs"><script>themetuner/jquery.miniColors.min.js</script></action>
+        	<action method="addJs"><script>themetuner/jquery-getpath.js</script></action>
+        	<action method="addJs"><script>themetuner/jquery.colorbox-min.js</script></action>
+        	<action method="addJs"><script>themetuner/jquery.json-2.3.min.js</script></action>
+        	<action method="addJs"><script>themetuner/jquery.observe.js</script></action>
+        	<action method="addJs"><script>themetuner/themetuner.ActiveObject.js</script></action>
+			<action method="addJs"><script>themetuner/themetuner.devices.js</script></action>
+        	<action method="addJs"><script>themetuner/themetuner.js</script></action>
+            <action method="addJs"><script>lib/flex.js</script></action>
+            <action method="addJs"><script>lib/FABridge.js</script></action>
+            <action method="addJs"><script>mage/adminhtml/flexuploader.js</script></action>
+        	<action method="addJs"><script>mage/adminhtml/browser.js</script></action>
+        	<action method="addJs"><script>mage/adminhtml/wysiwyg/widget.js</script></action>
+        	<action method="addJs"><script>themetuner/widget.js</script></action>
+            <action method="addJs"><script>prototype/window.js</script></action>
+            <action method="addJs"><script>themetuner/jquery.resizeend.js</script></action>
+        </reference>
+    </themetuner_adminhtml_themetuner_edit>
+
+    <themetuner_adminhtml_themetuner_ajaxnewblock>
+        <block name="root" type="themetuner/adminhtml_edit_block" output="toHtml" />
+    </themetuner_adminhtml_themetuner_ajaxnewblock>
+
+    <themetuner_adminhtml_themetuner_loadoptions>
+        <block name="wysiwyg_widget.options" type="widget/adminhtml_widget_options" output="toHtml" />
+    </themetuner_adminhtml_themetuner_loadoptions>
+</layout>

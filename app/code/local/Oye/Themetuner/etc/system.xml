@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<config>
+    <sections>
+        <design>
+            <groups>
+                <theme>
+                    <fields>
+                        <theme_shortcut translate="label">
+                            <label>Theme</label>
+                            <frontend_type>themetuner_themelist</frontend_type>
+                            <source_model>themetuner/adminhtml_system_config_backend_themes</source_model>
+                            <sort_order>2</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </theme_shortcut>
+                        <themetuner_preset translate="label,comment">
+                            <label>Tune</label>
+                            <frontend_type>themetuner_presetlist</frontend_type>
+                            <source_model>themetuner/adminhtml_system_config_backend_presets</source_model>
+                            <sort_order>3</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>"Tune" is Themetuner's modification to selected theme.</comment>
+                        </themetuner_preset>
+                    </fields>
+                </theme>
+            </groups>
+        </design>
+    </sections>
+</config>
